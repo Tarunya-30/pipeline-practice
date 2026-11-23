@@ -18,11 +18,12 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ vars.EC2_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
       - name: Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-          "cd /home/ubuntu/docker-application/pipeline-practice && git pull origin master"
+           ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no \
+            ${{ vars.EC2_USER }}@${{ vars.EC2_HOST }} \
+            "cd /home/ubuntu/docker-application/pipeline-practice && git pull origin master"
+          
